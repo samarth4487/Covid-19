@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.title = "Covid 19"
+        navigationController?.navigationBar.isTranslucent = false
         edgesForExtendedLayout = []
         fetchHomeData()
     }
