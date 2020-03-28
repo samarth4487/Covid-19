@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  Covid-19
 //
 //  Created by Samarth Paboowal on 26/03/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     var topContainerView: UIView = {
         let view = UIView()
@@ -154,6 +154,7 @@ class ViewController: UIViewController {
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 10
         view.backgroundColor = .systemGray6
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -281,6 +282,15 @@ class ViewController: UIViewController {
         viewByCountryImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         viewByCountryImageView.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor, constant: -20).isActive = true
         viewByCountryImageView.centerYAnchor.constraint(equalTo: bottomContainerView.centerYAnchor).isActive = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapViewByCountry))
+        bottomContainerView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc fileprivate func didTapViewByCountry() {
+        
+        let countryWiseVC = CountryWiseViewController()
+        navigationController?.pushViewController(countryWiseVC, animated: true)
     }
 
 }
