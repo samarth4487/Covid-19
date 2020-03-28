@@ -10,6 +10,40 @@ import Foundation
 
 struct HomeData: Decodable {
     
+    var data: WorldWideData?
+    var dt: String?
+    var ts: Int?
+    
+    private enum CodingKeys: String, CodingKey {
+        case data
+        case dt
+        case ts
+    }
+    
+    static func fetchHomeData(url: URL, completion: @escaping (Result<WorldWideData, APIError>) -> Void) {
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.domainError))
+                return
+            }
+            
+            do {
+                let homeData = try JSONDecoder().decode(HomeData.self, from: data)
+                guard let worldWideData = homeData.data else {
+                    completion(.failure(.InvalidDataError))
+                    return
+                }
+                completion(.success(worldWideData))
+            } catch {
+                completion(.failure(.decodingError))
+            }
+        }.resume()
+    }
+}
+
+struct WorldWideData: Decodable {
+    
     var confirmed: Int?
     var deaths: Int?
     var recovered: Int?
@@ -40,18 +74,13 @@ struct HomeData: Decodable {
         
         guard let confirmed = confirmed, let deaths = deaths, let recovered = recovered else { return }
         
-        active = deaths + recovered
-        closed = confirmed - active!
+        closed = deaths + recovered
+        active = confirmed - closed!
         
-        activePercentage = (active!/confirmed) * 100
+        activePercentage = Int((Double(active!)/Double(confirmed)) * 100)
         closedPercentage = 100 - activePercentage!
         
-        recoveredPercentage = (recovered/active!) * 100
+        recoveredPercentage = Int((Double(recovered)/Double(closed!)) * 100)
         deathPercentage = 100 - recoveredPercentage!
-    }
-    
-    fileprivate static func fetchHomeData() {
-        
-        
     }
 }

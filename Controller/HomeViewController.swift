@@ -14,14 +14,14 @@ class HomeViewController: UIViewController {
     let middleContainerView = HomeMiddleContainerView()
     let bottomContainerView = HomeBottomContainerView()
 
-    var homeData: HomeData!
+    var worldWideData: WorldWideData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.title = "Covid 19"
         edgesForExtendedLayout = []
-        layoutViews()
+        fetchHomeData()
     }
     
     fileprivate func layoutViews() {
@@ -43,6 +43,22 @@ class HomeViewController: UIViewController {
         middleContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         middleContainerView.topAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: 20).isActive = true
         middleContainerView.bottomAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: -20).isActive = true
+    }
+    
+    fileprivate func fetchHomeData() {
+        
+        HomeData.fetchHomeData(url: URL(string: Constants.URL.home)!) { (result) in
+            
+            switch result {
+            case .success(let worldWideData):
+                self.worldWideData = worldWideData
+                DispatchQueue.main.async {
+                    self.layoutViews()
+                }
+            case .failure:
+                print("Failure")
+            }
+        }
     }
 }
 
