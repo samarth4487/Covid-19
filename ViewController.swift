@@ -19,6 +19,34 @@ class ViewController: UIViewController {
         return view
     }()
     
+    let coronavirusLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Coronavirus Cases"
+        label.textColor = .label
+        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let topContainerHorizontalLine: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemGray
+        return view
+    }()
+    
+    let topContainerVerticalStackView: UIStackView = {
+        let view = UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.distribution = .fillEqually
+        view.spacing = 20
+        view.alignment = .center
+        return view
+    }()
+    
     let totalCasesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +56,7 @@ class ViewController: UIViewController {
         return label
     }()
 
-    let deathsLabel: UILabel = {
+    let closedCasesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -37,7 +65,7 @@ class ViewController: UIViewController {
         return label
     }()
 
-    let recoveredLabel: UILabel = {
+    let activeCasesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -55,7 +83,7 @@ class ViewController: UIViewController {
         return view
     }()
     
-    let closedCasesLabel: UILabel = {
+    let closedCasesHeadingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Closed Cases"
@@ -179,42 +207,45 @@ class ViewController: UIViewController {
     
     fileprivate func layoutTopContainer() {
         
-        topContainerView.addSubview(totalCasesLabel)
-        totalCasesLabel.topAnchor.constraint(equalTo: topContainerView.topAnchor).isActive = true
-        totalCasesLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 20).isActive = true
-        totalCasesLabel.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -20).isActive = true
-        totalCasesLabel.heightAnchor.constraint(equalTo: topContainerView.heightAnchor, multiplier: 0.33).isActive = true
+        topContainerView.addSubview(coronavirusLabel)
+        coronavirusLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 20).isActive = true
+        coronavirusLabel.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -20).isActive = true
+        coronavirusLabel.topAnchor.constraint(equalTo: topContainerView.topAnchor, constant: 20).isActive = true
         
-        topContainerView.addSubview(recoveredLabel)
-        recoveredLabel.bottomAnchor.constraint(equalTo: topContainerView.bottomAnchor).isActive = true
-        recoveredLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 20).isActive = true
-        recoveredLabel.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -20).isActive = true
-        recoveredLabel.heightAnchor.constraint(equalTo: topContainerView.heightAnchor, multiplier: 0.33).isActive = true
+        topContainerView.addSubview(topContainerHorizontalLine)
+        topContainerHorizontalLine.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor).isActive = true
+        topContainerHorizontalLine.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor).isActive = true
+        topContainerHorizontalLine.topAnchor.constraint(equalTo: coronavirusLabel.bottomAnchor, constant: 15).isActive = true
+        topContainerHorizontalLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
-        topContainerView.addSubview(deathsLabel)
-        deathsLabel.topAnchor.constraint(equalTo: totalCasesLabel.bottomAnchor).isActive = true
-        deathsLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 20).isActive = true
-        deathsLabel.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -20).isActive = true
-        deathsLabel.bottomAnchor.constraint(equalTo: recoveredLabel.topAnchor).isActive = true
+        topContainerView.addSubview(topContainerVerticalStackView)
+        topContainerVerticalStackView.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 20).isActive = true
+        topContainerVerticalStackView.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -20).isActive = true
+        topContainerVerticalStackView.topAnchor.constraint(equalTo: topContainerHorizontalLine.bottomAnchor, constant: 20).isActive = true
+        topContainerVerticalStackView.bottomAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: -20).isActive = true
         
-        totalCasesLabel.attributedText = NSMutableAttributedString().custom("Total Cases:\n", font: .systemFont(ofSize: 24), color: .label).custom("467594", font: .systemFont(ofSize: 36, weight: .semibold), color: .label)
+        topContainerVerticalStackView.addArrangedSubview(totalCasesLabel)
+        topContainerVerticalStackView.addArrangedSubview(closedCasesLabel)
+        topContainerVerticalStackView.addArrangedSubview(activeCasesLabel)
         
-        deathsLabel.attributedText = NSMutableAttributedString().custom("Deaths:\n", font: .systemFont(ofSize: 24), color: .label).custom("21181", font: .systemFont(ofSize: 36, weight: .semibold), color: .systemRed)
+        totalCasesLabel.attributedText = NSMutableAttributedString().custom("467594\n", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemRed).custom("Total Cases", font: .systemFont(ofSize: 20), color: .label)
         
-        recoveredLabel.attributedText = NSMutableAttributedString().custom("Recovered:\n", font: .systemFont(ofSize: 24), color: .label).custom("113770", font: .systemFont(ofSize: 36, weight: .semibold), color: .systemGreen)
+        closedCasesLabel.attributedText = NSMutableAttributedString().custom("21181", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemBlue).custom(" (30%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Closed Cases", font: .systemFont(ofSize: 20), color: .label)
+        
+        activeCasesLabel.attributedText = NSMutableAttributedString().custom("113770", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemOrange).custom(" (70%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Active Cases", font: .systemFont(ofSize: 20), color: .label)
     }
     
     fileprivate func layoutMiddleContainer() {
         
-        middleContainerView.addSubview(closedCasesLabel)
-        closedCasesLabel.leadingAnchor.constraint(equalTo: middleContainerView.leadingAnchor, constant: 20).isActive = true
-        closedCasesLabel.trailingAnchor.constraint(equalTo: middleContainerView.trailingAnchor, constant: -20).isActive = true
-        closedCasesLabel.topAnchor.constraint(equalTo: middleContainerView.topAnchor, constant: 20).isActive = true
+        middleContainerView.addSubview(closedCasesHeadingLabel)
+        closedCasesHeadingLabel.leadingAnchor.constraint(equalTo: middleContainerView.leadingAnchor, constant: 20).isActive = true
+        closedCasesHeadingLabel.trailingAnchor.constraint(equalTo: middleContainerView.trailingAnchor, constant: -20).isActive = true
+        closedCasesHeadingLabel.topAnchor.constraint(equalTo: middleContainerView.topAnchor, constant: 20).isActive = true
         
         middleContainerView.addSubview(horizontalLine)
         horizontalLine.leadingAnchor.constraint(equalTo: middleContainerView.leadingAnchor).isActive = true
         horizontalLine.trailingAnchor.constraint(equalTo: middleContainerView.trailingAnchor).isActive = true
-        horizontalLine.topAnchor.constraint(equalTo: closedCasesLabel.bottomAnchor, constant: 15).isActive = true
+        horizontalLine.topAnchor.constraint(equalTo: closedCasesHeadingLabel.bottomAnchor, constant: 15).isActive = true
         horizontalLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         middleContainerView.addSubview(middleContainerVerticalStackView)
