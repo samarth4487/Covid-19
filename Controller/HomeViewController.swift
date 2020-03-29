@@ -27,7 +27,7 @@ class HomeViewController: UIViewController, HomeBottomContainerViewDelegate {
     
     fileprivate func fetchHomeData() {
         
-        HomeData.fetchHomeData(url: URL(string: Constants.URL.home)!) { (result) in
+        WebService.shared.fetchHomeData(url: URL(string: WebService.APIEndpoint.home)!) { (result) in
             
             switch result {
             case .success(let worldWideData):
@@ -35,8 +35,8 @@ class HomeViewController: UIViewController, HomeBottomContainerViewDelegate {
                 DispatchQueue.main.async {
                     self.layoutViews()
                 }
-            case .failure:
-                print("Failure")
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }

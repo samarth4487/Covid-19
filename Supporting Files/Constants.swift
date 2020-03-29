@@ -8,16 +8,7 @@
 
 import Foundation
 
-enum APIError: Error {
-    case domainError
-    case decodingError
-    case InvalidDataError
-}
-
 struct Constants {
     
-    struct URL {
-        static let home = "https://covid2019-api.herokuapp.com/v2/total"
-        static let countryWise = "https://covid2019-api.herokuapp.com/v2/current"
-    }
+    
 }

@@ -19,27 +19,6 @@ struct HomeData: Decodable {
         case dt
         case ts
     }
-    
-    static func fetchHomeData(url: URL, completion: @escaping (Result<WorldWideData, APIError>) -> Void) {
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, error == nil else {
-                completion(.failure(.domainError))
-                return
-            }
-            
-            do {
-                let homeData = try JSONDecoder().decode(HomeData.self, from: data)
-                guard let worldWideData = homeData.data else {
-                    completion(.failure(.InvalidDataError))
-                    return
-                }
-                completion(.success(worldWideData))
-            } catch {
-                completion(.failure(.decodingError))
-            }
-        }.resume()
-    }
 }
 
 struct WorldWideData: Decodable {
