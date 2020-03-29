@@ -8,11 +8,11 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, HomeBottomContainerViewDelegate {
     
-    let topContainerView = HomeTopContainerView()
-    let middleContainerView = HomeMiddleContainerView()
-    let bottomContainerView = HomeBottomContainerView()
+    var topContainerView: HomeTopContainerView!
+    var middleContainerView: HomeMiddleContainerView!
+    var bottomContainerView: HomeBottomContainerView!
 
     var worldWideData: WorldWideData!
     
@@ -23,27 +23,6 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         edgesForExtendedLayout = []
         fetchHomeData()
-    }
-    
-    fileprivate func layoutViews() {
-        
-        view.addSubview(topContainerView)
-        topContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        topContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        topContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        topContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
-        
-        view.addSubview(bottomContainerView)
-        bottomContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        bottomContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        bottomContainerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        bottomContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-        
-        view.addSubview(middleContainerView)
-        middleContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        middleContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        middleContainerView.topAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: 20).isActive = true
-        middleContainerView.bottomAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: -20).isActive = true
     }
     
     fileprivate func fetchHomeData() {
@@ -60,6 +39,35 @@ class HomeViewController: UIViewController {
                 print("Failure")
             }
         }
+    }
+    
+    fileprivate func layoutViews() {
+        
+        topContainerView = HomeTopContainerView(totalCases: worldWideData.confirmed ?? -1, closedCases: worldWideData.closed ?? -1, activeCases: worldWideData.active ?? -1, closedCasesPercentage: worldWideData.closedPercentage ?? -1, activeCasesPercentage: worldWideData.activePercentage ?? -1)
+        view.addSubview(topContainerView)
+        topContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        topContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        topContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
+        topContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.45).isActive = true
+        
+        bottomContainerView = HomeBottomContainerView(delegate: self)
+        view.addSubview(bottomContainerView)
+        bottomContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        bottomContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        bottomContainerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        bottomContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        
+        middleContainerView = HomeMiddleContainerView(closedCases: worldWideData.closed ?? -1, recovered: worldWideData.recovered ?? -1, deaths: worldWideData.deaths ?? -1, recoveredPercentage: worldWideData.recoveredPercentage ?? -1, deathPercentage: worldWideData.deathPercentage ?? -1)
+        view.addSubview(middleContainerView)
+        middleContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        middleContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        middleContainerView.topAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: 20).isActive = true
+        middleContainerView.bottomAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: -20).isActive = true
+    }
+    
+    func didTapViewByCountry() {
+        let countryWiseVC = CountryWiseViewController()
+        navigationController?.pushViewController(countryWiseVC, animated: true)
     }
 }
 

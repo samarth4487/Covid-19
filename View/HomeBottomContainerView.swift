@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HomeBottomContainerViewDelegate {
+    func didTapViewByCountry()
+}
+
 class HomeBottomContainerView: UIView {
 
     let viewByCountryLabel: UILabel = {
@@ -25,7 +29,9 @@ class HomeBottomContainerView: UIView {
         return view
     }()
     
-    init() {
+    var delegate: HomeBottomContainerViewDelegate!
+    
+    init(delegate: HomeBottomContainerViewDelegate) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
@@ -33,14 +39,15 @@ class HomeBottomContainerView: UIView {
         backgroundColor = .systemGray6
         isUserInteractionEnabled = true
         
-        layoutViews()
+        self.delegate = delegate
+        configureView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func layoutViews() {
+    fileprivate func configureView() {
         
         addSubview(viewByCountryLabel)
         viewByCountryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
@@ -58,7 +65,8 @@ class HomeBottomContainerView: UIView {
     }
     
     @objc fileprivate func didTapViewByCountry() {
-        
+        guard let localDelegate = delegate else { return }
+        localDelegate.didTapViewByCountry()
     }
 
 }

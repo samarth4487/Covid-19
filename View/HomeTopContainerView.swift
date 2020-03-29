@@ -63,22 +63,34 @@ class HomeTopContainerView: UIView {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
+    
+    var totalCases: Int!
+    var closedCases: Int!
+    var activeCases: Int!
+    var closedCasesPercentage: Int!
+    var activeCasesPercentage: Int!
 
-    init() {
+    init(totalCases: Int, closedCases: Int, activeCases: Int, closedCasesPercentage: Int, activeCasesPercentage: Int) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
         layer.cornerRadius = 10
         backgroundColor = .systemGray6
         
-        layoutViews()
+        self.totalCases = totalCases
+        self.closedCases = closedCases
+        self.activeCases = activeCases
+        self.closedCasesPercentage = closedCasesPercentage
+        self.activeCasesPercentage = activeCasesPercentage
+        
+        configureView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func layoutViews() {
+    fileprivate func configureView() {
         
         addSubview(coronavirusLabel)
         coronavirusLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
@@ -103,11 +115,11 @@ class HomeTopContainerView: UIView {
         verticalStackView.addArrangedSubview(closedCasesLabel)
         verticalStackView.addArrangedSubview(activeCasesLabel)
 
-        totalCasesLabel.attributedText = NSMutableAttributedString().custom("467594\n", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemRed).custom("Total Cases", font: .systemFont(ofSize: 20), color: .label)
+        totalCasesLabel.attributedText = NSMutableAttributedString().custom("\(totalCases!)\n", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemRed).custom("Total Cases", font: .systemFont(ofSize: 20), color: .label)
 
-        closedCasesLabel.attributedText = NSMutableAttributedString().custom("21181", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemBlue).custom(" (30%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Closed Cases", font: .systemFont(ofSize: 20), color: .label)
+        closedCasesLabel.attributedText = NSMutableAttributedString().custom("\(closedCases!)", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemBlue).custom(" (\(closedCasesPercentage!)%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Closed Cases", font: .systemFont(ofSize: 20), color: .label)
 
-        activeCasesLabel.attributedText = NSMutableAttributedString().custom("113770", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemOrange).custom(" (70%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Active Cases", font: .systemFont(ofSize: 20), color: .label)
+        activeCasesLabel.attributedText = NSMutableAttributedString().custom("\(activeCases!)", font: .systemFont(ofSize: 32, weight: .semibold), color: .systemOrange).custom(" (\(activeCasesPercentage!)%)\n", font: .systemFont(ofSize: 20, weight: .medium), color: .label).custom("Active Cases", font: .systemFont(ofSize: 20), color: .label)
     }
     
 }

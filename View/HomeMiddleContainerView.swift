@@ -75,21 +75,33 @@ class HomeMiddleContainerView: UIView {
         return label
     }()
     
-    init() {
+    var closedCases: Int!
+    var recovered: Int!
+    var deaths: Int!
+    var recoveredPercentage: Int!
+    var deathPercentage: Int!
+    
+    init(closedCases: Int, recovered: Int, deaths: Int, recoveredPercentage: Int, deathPercentage: Int) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
         layer.cornerRadius = 10
         backgroundColor = .systemGray6
         
-        layoutViews()
+        self.closedCases = closedCases
+        self.recovered = recovered
+        self.deaths = deaths
+        self.recoveredPercentage = recoveredPercentage
+        self.deathPercentage = deathPercentage
+        
+        configureView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func layoutViews() {
+    fileprivate func configureView() {
         
         addSubview(closedCasesLabel)
         closedCasesLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
@@ -117,11 +129,11 @@ class HomeMiddleContainerView: UIView {
         horizontalStackView.addArrangedSubview(recoveredCasesInfoLabel)
         horizontalStackView.addArrangedSubview(deathCasesInfoLabel)
         
-        closedCasesInfoLabel.attributedText = NSMutableAttributedString().custom("158113\n", font: .systemFont(ofSize: 24, weight: .bold), color: .systemBlue).custom("Cases which had an outcome", font: .systemFont(ofSize: 16), color: .label)
+        closedCasesInfoLabel.attributedText = NSMutableAttributedString().custom("\(closedCases!)\n", font: .systemFont(ofSize: 24, weight: .bold), color: .systemBlue).custom("Cases which had an outcome", font: .systemFont(ofSize: 16), color: .label)
         
-        recoveredCasesInfoLabel.attributedText = NSMutableAttributedString().custom("130915", font: .systemFont(ofSize: 24, weight: .bold), color: .systemGreen).custom(" (83%)\n", font: .systemFont(ofSize: 16, weight: .medium), color: .label).custom("Recovered", font: .systemFont(ofSize: 16), color: .label)
+        recoveredCasesInfoLabel.attributedText = NSMutableAttributedString().custom("\(recovered!)", font: .systemFont(ofSize: 24, weight: .bold), color: .systemGreen).custom(" (\(recoveredPercentage!)%)\n", font: .systemFont(ofSize: 16, weight: .medium), color: .label).custom("Recovered", font: .systemFont(ofSize: 16), color: .label)
         
-        deathCasesInfoLabel.attributedText = NSMutableAttributedString().custom("27198", font: .systemFont(ofSize: 24, weight: .bold), color: .systemRed).custom(" (17%)\n", font: .systemFont(ofSize: 16, weight: .medium), color: .label).custom("Deaths", font: .systemFont(ofSize: 16), color: .label)
+        deathCasesInfoLabel.attributedText = NSMutableAttributedString().custom("\(deaths!)", font: .systemFont(ofSize: 24, weight: .bold), color: .systemRed).custom(" \(deathPercentage!)%)\n", font: .systemFont(ofSize: 16, weight: .medium), color: .label).custom("Deaths", font: .systemFont(ofSize: 16), color: .label)
     }
 
 }
