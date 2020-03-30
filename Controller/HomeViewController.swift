@@ -19,7 +19,7 @@ class HomeViewController: UIViewController, HomeBottomContainerViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Covid 19"
+        navigationItem.title = "Home"
         navigationController?.navigationBar.isTranslucent = false
         edgesForExtendedLayout = []
         fetchHomeData()
@@ -27,13 +27,13 @@ class HomeViewController: UIViewController, HomeBottomContainerViewDelegate {
     
     fileprivate func fetchHomeData() {
         
-        WebService.shared.fetchHomeData(url: URL(string: WebService.APIEndpoint.home)!) { (result) in
+        WebService.shared.fetchHomeData(url: URL(string: WebService.APIEndpoint.home)!) { [weak self] (result) in
             
             switch result {
             case .success(let worldWideData):
-                self.worldWideData = worldWideData
+                self?.worldWideData = worldWideData
                 DispatchQueue.main.async {
-                    self.layoutViews()
+                    self?.layoutViews()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
