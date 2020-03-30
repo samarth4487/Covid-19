@@ -18,6 +18,16 @@ class CountryWiseViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        WebService.shared.fetchCountryWiseData(url: URL(string: WebService.APIEndpoint.countryWise)!) { (result) in
+            
+            switch result {
+            case .success(let countryData):
+                print(countryData.count)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 
     // MARK: - Table view data source

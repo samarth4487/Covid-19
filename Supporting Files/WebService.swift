@@ -39,6 +39,27 @@ class WebService {
             }
         }.resume()
     }
+    
+    func fetchCountryWiseData(url: URL, completion: @escaping (Result<[Country], APIError>) -> Void) {
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.InvalidDataError))
+                return
+            }
+            
+            do {
+                let decodedData = try JSONDecoder().decode(CountriesData.self, from: data)
+                guard let countryWiseData = decodedData.data else {
+                    completion(.failure(.InvalidDataError))
+                    return
+                }
+                completion(.success(countryWiseData))
+            } catch {
+                completion(.failure(.decodingError))
+            }
+        }.resume()
+    }
 }
 
 enum APIError: Error {
